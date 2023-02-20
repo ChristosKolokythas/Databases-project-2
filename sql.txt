@@ -1,0 +1,48 @@
+-- 1
+ 
+SELECT DISTINCT u.name, u.review_count, u.yelping_since
+ from user u
+ WHERE u.review_count > 500 AND u.name = "Lisa"
+ORDER BY u.yelping_since ASC
+;
+
+-- 2
+
+SELECT u.user_id, b.business_id, r.review_id
+FROM reviews r , user u , business b
+WHERE r.business_id = b.business_id AND r.user_id = u.user_id AND b.name ="Gab&Eat" And u.name="Lisa"
+;
+
+-- 3
+SELECT distinct 'yes' as ANSWER  
+FROM business b, reviews r, reviews_pos_neg rpn
+WHERE b.business_id = "OmpbTu4deR3ByOo7btTTZw" AND b.business_id=r.business_id AND r.review_id = rpn.review_id AND rpn.positive = 1
+UNION
+SELECT distinct 'no' as ANSWER  
+FROM business b, reviews r, reviews_pos_neg rpn
+WHERE b.business_id = "OmpbTu4deR3ByOo7btTTZw" AND b.business_id=r.business_id AND r.review_id = rpn.review_id AND rpn.positive = 0
+;
+
+-- 4
+
+SELECT b.business_id, count(rpn.positive)
+FROM business b, reviews r, reviews_pos_neg rpn
+WHERE b.business_id=r.business_id AND r.review_id = rpn.review_id AND r.date LIKE '%2014%'
+GROUP BY b.business_id
+HAVING 10 < count(rpn.positive)
+;
+
+-- 5
+SELECT u.user_id, count(r.review_id)
+FROM user u, reviews r, business b, business_category bc, category c
+WHERE u.user_id = r.user_id AND r.business_id = b.business_id AND b.business_id = bc.business_id AND bc.category_id = c.category_id AND c.category LIKE 'Mobile Phones'
+GROUP BY  u.user_id
+;
+
+-- 6
+
+SELECT distinct r.votes_useful, u.user_id, b.name
+FROM user u, business b, reviews r
+WHERE u.user_id = r.user_id AND r.business_id = b.business_id AND b.name LIKE 'Midas'
+ORDER BY r.votes_useful DESC
+;
